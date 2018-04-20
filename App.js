@@ -1,48 +1,94 @@
-import React from 'react';
-import { StyleSheet, Text, View, Switch, Image, TextInput  } from 'react-native';
+import React, {Component} from 'react';
+import { StyleSheet, Text, View,TouchableHighlight, ListView, AlertIOS, NavigatorIOS,YellowBox} from 'react-native';
+import Login from './apps/Login'
 
-export default class App extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      value:true
-    };
-  }
-  
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Hello World</Text>
-        <Text style={{color:'red'}}>ESTADO= {String(this.state.value)}</Text>
-        <Text>ESTO ES UNA PRUEBA</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-        <Switch value={this.state.value} onValueChange={
-          () => this.setState({value:!this.state.value})}/>
-          <Image 
-          style={{width:100, height:100}} 
-          source={{uri:'https://mipagina.do/static/img/rocket-image.png'}}
-          />
-          <TextInput style={styles.field} placeholder='Escribe aqui lo que quieras'/>
-      </View>
-     );
-  }
+export default class App extends Component{
+    constructor(props){
+        super(props)
+        this.handler = this.handler.bind(this)
+        this.state = {
+            logged : false,
+            data : null
+        }
+    }
+    
+    componentDidMount(){
+        if(this.state.logged){
+            fetch('http://facebook.github.io/react-native/movies.json')
+            .then((response) => response.json())
+            .then((responseJson)=>{
+                this.setState({
+                    data:responseJson.movies
+                })
+            })
+        }
+    }
+    
+    getMovie(){
+        try {
+            response = fetch(
+              'https://facebook.github.io/react-native/movies.json'
+            );
+            responseJson = response.json();
+            return responseJson.movies;
+          } catch (error) {
+            console.error(error);
+          }
+    }
+
+   handler(){
+   
+       this.setState({
+           logged:true
+       })
+     
+   }
+    render(){
+        if(this.state.logged){
+            a = this.setState({
+                data :  this.getMovie.bind(this)
+            })
+            console.log(this.state.data)
+            this.componentDidMount.bind(this);
+            var res = this.state.data.map((item,i)=>{
+                return (
+                      <Text key={i}>{'consultaAPI-'+i} {item.title}</Text>
+                   );
+                })
+            return(
+                <View>
+                    {a}
+                    {res}
+                </View>
+            );
+        }else{
+            return(
+                <View style={style.container}>
+                   <Login action = {this.handler} logged = {this.state.logged}/>
+                </View>
+            );
+        }
+        
+    }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 0.5,
-    backgroundColor: '#fff',
-    alignItems:'center',
-    justifyContent: 'center',
-    alignContent:'flex-start',
-  },
-  field: {
-    width:200,
-    borderRadius: 4,
-    borderBottomWidth:2,
-    borderColor: '#ddd',
-    padding:20,
-    backgroundColor: '#fafafa',
-    justifyContent: 'center',
-  },
+const style = StyleSheet.create({
+    container : {
+        flex:1,
+        paddingTop:30,
+        alignItems:'center',
+        justifyContent: 'center'
+    },
+    button:{
+        backgroundColor:'#444',
+        width:160,
+        alignItems:'center',
+        borderRadius:5,
+        paddingLeft:20,
+        paddingRight:20,
+        paddingTop:10,
+        paddingBottom:10
+    },
+    colorBlanco:{
+        color:'#fff'
+    }
 });
