@@ -20,14 +20,10 @@ export default class PrimerasPruebas extends React.Component {
     };
   }
   componentDidMount(){
-    var titles = [];
     fetch('http://facebook.github.io/react-native/movies.json')
     .then((response) => response.json())
     .then((responseJson)=>{
       var movies  = responseJson.movies;
-      for( var i = 0; i< movies.length;i++){
-        titles.push(movies[i].title);
-      }
       this.setState({
         data:responseJson.movies
       })

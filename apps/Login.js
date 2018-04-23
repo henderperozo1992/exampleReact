@@ -12,6 +12,7 @@ export default class Login extends Component{
     render(){
         return(
             <View style={style.container}>
+            <Text>{this.props.action.bind(this)}</Text>
                 <TouchableHighlight 
                 style={style.button}>
                     <Button title= 'Login' onPress= {this.props.action.bind(this)}/>
