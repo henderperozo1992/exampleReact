@@ -5,6 +5,7 @@ import {StyleSheet, View, TextInput, Image} from 'react-native';
 
 export default class UserInput extends Component {
   render() {
+    var handleToUpdate  =   this.props.dato;
     return (
       <View style={styles.inputWrapper}>
         <Image source={this.props.source} style={styles.inlineImg} />
@@ -17,6 +18,7 @@ export default class UserInput extends Component {
           returnKeyType={this.props.returnKeyType}
           placeholderTextColor="white"
           underlineColorAndroid="transparent"
+          onChangeText={(text) =>  handleToUpdate(text)}
         />
       </View>
     );

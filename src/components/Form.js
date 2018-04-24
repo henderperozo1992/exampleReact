@@ -43,6 +43,7 @@ export default class Form extends Component {
           autoCapitalize={'none'}
           returnKeyType={'done'}
           autoCorrect={false}
+          dato={this.props.user} 
         />
         <UserInput
           source={passwordImg}
@@ -51,6 +52,7 @@ export default class Form extends Component {
           returnKeyType={'done'}
           autoCapitalize={'none'}
           autoCorrect={false}
+          dato={this.props.pass}
         />
         <TouchableOpacity
           activeOpacity={0.7}

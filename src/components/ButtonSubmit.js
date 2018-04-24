@@ -19,7 +19,9 @@ import spinner from '../images/loading.gif';
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
-const myRequest = new Request('http://facebook.github.io/react-native/movies.json');
+//const myRequest = new Request('http://facebook.github.io/react-native/movies.json');
+//const myRequest = new Request('http://mipagina.do:8000/api/login/');
+const myRequest = new Request('http://mipagina.do:8000/api/login/');
 
 export default class ButtonSubmit extends Component {
   constructor() {
@@ -47,46 +49,44 @@ export default class ButtonSubmit extends Component {
     }).start();
 
     setTimeout(() => {
-
-      fetch('http://mipagina.do:8000/api/login/',{
+      console.log("username="+this.props.user+"&password="+this.props.pass);
+      fetch(myRequest,{
         method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstParam: 'hperozo',
-          secondParam: 'alternagroup5025',
+          headers: new Headers({
+                    'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
+            }),
+          body: "username="+this.props.user+"&password="+this.props.pass // <-- Post parameters
         })
-      })
-    .then((response) => response)
-    .then((responseJson)=>{
-    
-      console.log(responseJson);
-      if(responseJson){
-        this.setState({
-          logged : true,
-          
-          data:responseJson.movies
+        .then((response) => response.text())
+        .then((responseText) => {
+          console.log(responseText);
+          if(responseText == 'true'){
+            this.setState({
+              logged : true,
+              data:responseText
+            });
+            //this._onGrow();
+            setTimeout(() => {
+              if(this.state.logged){
+                Actions.secondScreen();
+              }
+              this.setState({isLoading: false});
+              this.buttonAnimated.setValue(0);
+              this.growAnimated.setValue(0);
+            },100);
+          }else{
+            AlertIOS.alert('Datos de acceso invalidos');
+            this.setState({isLoading: false});
+            this.buttonAnimated.setValue(0);
+            this.growAnimated.setValue(0);
+          }
+        })
+        .catch((error) => {
+            console.error(error);
         });
-        this._onGrow();
-      }else{
-        AlertIOS.alert('Datos de acceso invalidos');
-      }
-      
-    })
-      console.log(this.state.data);
-      //
     }, 2000);
 
-    setTimeout(() => {
-      if(this.state.logged){
-        Actions.secondScreen();
-      }
-      this.setState({isLoading: false});
-      this.buttonAnimated.setValue(0);
-      this.growAnimated.setValue(0);
-    }, 2300);
+    
   }
 
   _onGrow() {
